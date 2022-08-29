@@ -1,0 +1,51 @@
+<%- include('snavbar')%>
+<%- include('./../partials/errorMsg')%>
+<div class="panel">
+    <div class="panel-body">
+        <h4>Profile</h4>
+        <div class="row">
+            <div class="bio-row">
+                    
+                <p><span style="font-weight: bold;color: black;">Name: </span><%=user.name%></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="font-weight: bold; color: black;">Email: </span><%=user.email%></p>
+            </div>
+            <%if(student!=null){%>
+            <div class="bio-row">
+                <span style="font-weight: bold; color: black;">School/University: </span><%=student.school%>
+            </div>
+            <div class="bio-row">
+                <p><span style="font-weight: bold; color: black;">Age: </span><%=student.age%></p>
+            </div>
+            <%}else{%>
+                <div class="bio-row">
+                    <span style="font-weight: bold; color: black;">School/University: </span>Not added
+                </div>
+                <div class="bio-row">
+                    <p><span style="font-weight: bold; color: black;">Age: </span>Not added</p>
+                </div>
+                <%}%>
+  
+        </div>
+        <a class="btn btn-danger btn-raised" href="/student/profile/edit" >Edit/Update Profile</a>
+    </div>
+
+<div class="filter">
+    <h4 class="card-text">Your Questions</h4>
+    <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Filter
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="/student/profile">All</a>
+          <a class="dropdown-item" href="/student/profile/filter/true">Answered</a>
+          <a class="dropdown-item" href="/student/profile/filter/false">Unanswered</a>
+        </div>
+      </div>
+      
+</div>
+<%- include('./../partials/questions',{
+    questions:questions
+})%>
+

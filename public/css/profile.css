@@ -1,0 +1,34 @@
+.bio-row {
+    width: 50%;
+    float: left;
+    margin-bottom: 10px;
+    padding:0 15px;
+}
+
+.bio-row p span {
+    width: 100px;
+    display: inline-block;
+}
+
+.filter{
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5rem;
+}
+
+.panel-body{
+    background-color: orange;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    padding: 0.5rem;
+    min-width: 25%;
+}
+
+.update-teacher{
+    background-color: greenyellow;
+    padding: 1.5rem;
+    min-height: 100vh;
+}
+
+.expertise{
+    display: flex;
+}

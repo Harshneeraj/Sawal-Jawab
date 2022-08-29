@@ -1,0 +1,124 @@
+
+<% if(typeof answers!='undefined'){%>
+    <% answers.forEach(answer=>{%>
+        <div class="card" style="background-color: rgb(220, 224, 228);">
+            <div class="card-body">
+              <div class="answer-header" style="display: flex; justify-content: space-between;">
+                <h5 class="card-text"><%=answer.author.name%></h5>
+                <%if(user.role=='student'){%>
+                  <a class="btn btn-primary" href="/student/view/<%=answer.author.id%>">View Profile</a>
+                <%}%>
+                <%if(user.id==answer.author.id){%>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                    Delete Answer
+                  </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to delete the answer?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <a href="/teacher/answers/delete/<%=question.id%>/<%=answer.id%>" type="button" class="btn btn-danger">Delete</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <%}%>
+              </div>
+                
+              <p class="card-text"><%=answer.text%></p>
+              <h6 class="card-text"><%=answer.created.toLocaleString()%></h6>
+
+              <%if(user.role=='student'){%>
+              <div class="like-dislike">
+                <%if(answer.likedby.includes(user.id)){%>
+                  <button id="like-ans" class="btn" onclick="handleAnswerLike('<%=answer.id%>')"  data-state="liked" style="color:black; background-color: blue;">
+                    <i class="fas fa-thumbs-up"></i> Like <span id="count-ans"><%=answer.likedby.length%></span>
+                  </button>
+                <%}else{%>
+                  <button id="like-ans" class="btn" onclick="handleAnswerLike('<%=answer.id%>')"  data-state="unliked" style="color:black; background-color: darkorange;">
+                    <i class="fas fa-thumbs-up"></i> Like <span id="count-ans"><%=answer.likedby.length%></span>
+                  </button>
+                  <%}%>
+                <%if(answer.dislikedby.includes(user.id)){%>
+                  <button id="dislike-ans" class="btn" onclick="handleAnswerDislike('<%=answer.id%>')" data-state="clicked" style="color:black; background-color: blue;">
+                    <i class="fas fa-thumbs-down"></i> Dislike <span id="count-dis"><%=answer.dislikedby.length%></span>
+                  </button>
+                <%}else{%>
+                  <button id="dislike-ans" class="btn" onclick="handleAnswerDislike('<%=answer.id%>')" data-state="unclicked" style="color:black; background-color: darkorange;">
+                    <i class="fas fa-thumbs-down"></i> Dislike <span id="count-dis"><%=answer.dislikedby.length%></span>
+                <%}}%>
+                
+              </div>
+            </div>
+          </div>
+          <br/>          
+    
+<%})}%>
+
+<script>
+  var like = document.getElementById('like-ans');
+  var dislike = document.getElementById('dislike-ans');
+  const handleAnswerLike = (answerid)=>{
+    if(like.dataset.state ==="unliked")
+    {
+      if(dislike.dataset.state==='clicked')
+      {
+        dislike.dataset.state = "unclicked";
+        document.getElementById('count-dis').textContent--;
+      dislike.style.backgroundColor="darkorange";
+        
+      }
+      like.dataset.state = 'liked';
+      document.getElementById('count-ans').textContent++;
+      like.style.backgroundColor="blue";
+    }
+    else{
+      like.dataset.state = 'unliked';
+      document.getElementById('count-ans').textContent--;
+      like.style.backgroundColor="darkorange";
+    }
+    fetch('http://localhost:5000/student/answer/like/'+answerid,{
+      method:'POST',
+      headers:{
+        'Content-type':'application/json'
+      }
+    });
+  };
+  const handleAnswerDislike = (answerid)=>{
+    if(dislike.dataset.state ==="unclicked")
+    {
+      if(like.dataset.state==='liked')
+      {
+        like.dataset.state='unliked';
+        document.getElementById('count-ans').textContent--;
+        like.style.backgroundColor="darkorange";
+      }
+      dislike.dataset.state = 'clicked';
+      document.getElementById('count-dis').textContent++;
+      dislike.style.backgroundColor="blue";
+    }
+    else{
+      dislike.dataset.state = 'unclicked';
+      document.getElementById('count-dis').textContent--;
+      dislike.style.backgroundColor="darkorange";
+    }
+    fetch('http://localhost:5000/student/answer/dislike/'+answerid,{
+      method:'POST',
+      headers:{
+        'Content-type':'application/json'
+      }
+    });
+  }
+</script>
